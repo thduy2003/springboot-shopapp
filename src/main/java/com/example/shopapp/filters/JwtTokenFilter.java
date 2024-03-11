@@ -25,6 +25,7 @@ import java.io.IOException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
@@ -86,7 +87,17 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 //              Pair.of(String.format("%s/orders", apiPrefix), "GET"),
               Pair.of(String.format("%s/roles", apiPrefix), "GET"),
               Pair.of(String.format("%s/users/register", apiPrefix), "POST"),
-              Pair.of(String.format("%s/users/login", apiPrefix), "POST")
+              Pair.of(String.format("%s/users/login", apiPrefix), "POST"),
+              Pair.of("/swagger-ui/", "GET"),
+              Pair.of("/swagger-ui.html", "GET"),
+              Pair.of("/configuration/ui", "GET"),
+              Pair.of("/configuration/security", "GET"),
+              Pair.of("/swagger-resources/", "GET"),
+              Pair.of("/swagger-resources", "GET"),
+              Pair.of("/v2/api-docs", "GET"),
+              Pair.of("/v3/api-docs", "GET"),
+              Pair.of("/v3/api-docs/", "GET")
+
       );
       String requestPath = request.getServletPath();
       String requestMethod = request.getMethod();

@@ -43,8 +43,17 @@ public class WebSecurityConfig {
                     requests.requestMatchers(
                                      String.format("%s/users/register",apiPrefix),
                                     String.format("%s/users/login",apiPrefix),String.format("%s/categories**",apiPrefix)
-                                    ,String.format("%s/roles",apiPrefix), String.format("%s/products/images/*",apiPrefix)
-
+                                    ,String.format("%s/roles",apiPrefix), String.format("%s/products/images/*",apiPrefix),
+                                    "/v2/api-docs"
+                                    ,"/v3/api-docs"
+                                    ,"/v3/api-docs/**"
+                                    ,"/swagger-resources"
+                                    ,"/swagger-resources/**"
+                            ,"/configuration/security"
+                                    ,"/configuration/ui"
+                                    ,"/swagger-ui.html"
+                                    ,"/swagger-ui/**"
+                                    , "/webjars/**"
                             )
                             .permitAll()
                             .requestMatchers(
