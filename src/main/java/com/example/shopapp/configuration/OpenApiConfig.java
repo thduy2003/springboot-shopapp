@@ -30,6 +30,10 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 @Server(
                         description = "Local ENV",
                         url = "http://localhost:8088"
+                ),
+                @Server(
+                        description = "Build production",
+                        url = "https://springboot-shopapp.onrender.com"
                 )
 
         },
