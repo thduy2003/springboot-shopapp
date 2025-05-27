@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  mysql:
+    container_name: please-mysql
+    image: mysql:8.2.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: shop-app
+    ports:
+      - '3307:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - springboot-mysql-network
+
+  redis:
+    image: docker.io/redis:7.2.3
+    container_name: please-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    networks:
+      - springboot-mysql-network
+
+  app:
+    container_name: spring_boot_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    ports:
+      - '8088:8088'
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/shop-app?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    networks:
+      - springboot-mysql-network
+
+volumes:
+  mysql-data:
+
+networks:
+  springboot-mysql-network:
+    driver: bridge
