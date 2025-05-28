@@ -8,11 +8,14 @@ import com.example.shopapp.models.User;
 import com.example.shopapp.responses.LoginResponse;
 import com.example.shopapp.responses.RegisterResponse;
 import com.example.shopapp.responses.UserResponse;
+import com.example.shopapp.services.ITokenService;
 import com.example.shopapp.services.IUserService;
 import com.example.shopapp.utils.MessageKeys;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -27,36 +30,53 @@ import java.util.List;
 public class UserController {
     private final IUserService userService;
     private final LocalizationUtils localizationUtils;
+    private final ITokenService tokenService;
+
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO, BindingResult result) {
-        try{
-            if(result.hasErrors()) {
+        try {
+            if (result.hasErrors()) {
                 List<String> errorMessages = result.getFieldErrors().stream()
                         .map(FieldError::getDefaultMessage)
                         .toList();
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
             }
-            if(!userDTO.getPassword().equals(userDTO.getRetypePassword())) {
+            if (!userDTO.getPassword().equals(userDTO.getRetypePassword())) {
                 return ResponseEntity.badRequest().body(localizationUtils.getLocalizeMessage(MessageKeys.PASSWORD_NOT_MATCH));
             }
             User user = userService.createUser(userDTO);
             return ResponseEntity.ok(RegisterResponse.builder()
-                            .message(localizationUtils.getLocalizeMessage(MessageKeys.REGISTER_SUCCESSFULLY))
-                            .user(user)
+                    .message(localizationUtils.getLocalizeMessage(MessageKeys.REGISTER_SUCCESSFULLY))
+                    .user(user)
                     .build()
             );
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(localizationUtils.getLocalizeMessage(MessageKeys.REGISTER_FAILED, e.getMessage()));
         }
     }
+
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody UserLoginDTO userLoginDTO,
+                                               HttpServletRequest request,
+                                               BindingResult bindingResult) {
         try {
-                    String token = userService.login(userLoginDTO.getPhoneNumber(),
-                            userLoginDTO.getPassword(),
-                            userLoginDTO.getRoleId() == null ? 1 : userLoginDTO.getRoleId()
-                    );
+            if (bindingResult.hasErrors()) {
+                List<String> errorMessages = bindingResult.getFieldErrors().stream()
+                        .map(DefaultMessageSourceResolvable::getDefaultMessage).toList();
+                System.out.println(errorMessages);
+                return ResponseEntity.badRequest().body(
+                        LoginResponse.builder()
+                                .message(localizationUtils.getLocalizeMessage(MessageKeys.LOGIN_FAILED)
+                                ).build());
+            }
+            String token = userService.login(
+                    userLoginDTO.getPhoneNumber(),
+                    userLoginDTO.getPassword(),
+                    userLoginDTO.getRoleId() == null ? 1 : userLoginDTO.getRoleId()
+            );
+            String userAgent = request.getHeader("User-Agent");
+            User user = userService.getUserDetailsFromToken(token);
+            tokenService.addToken(user, token, isMobileDevice(userAgent));
             return ResponseEntity.ok(LoginResponse.builder()
                     .message(localizationUtils.getLocalizeMessage(MessageKeys.LOGIN_SUCCESSFULLY))
                     .token(token)
@@ -69,27 +89,32 @@ public class UserController {
             );
         }
     }
+
+    private boolean isMobileDevice(String userAgent) {
+        return userAgent.toLowerCase().contains("mobile");
+    }
+
     @PostMapping("/details")
     public ResponseEntity<UserResponse> getUserDetails(@RequestHeader("Authorization") String token) {
         try {
             String extractedToken = token.substring(7);
             User user = userService.getUserDetailsFromToken(extractedToken);
             return ResponseEntity.ok(UserResponse.fromUser(user));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
+
     @PutMapping("/details/{userId}")
     public ResponseEntity<UserResponse> updateUserDetails(
             @PathVariable Long userId,
             @RequestBody UpdateUserDTO updateUserDTO,
             @RequestHeader("Authorization") String authorizationHeader
-            ) {
+    ) {
         try {
             String extractedToken = authorizationHeader.substring(7);
             User user = userService.getUserDetailsFromToken(extractedToken);
-            if(user.getId() != userId) {
+            if (user.getId() != userId) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
             User updateUser = userService.updateUser(userId, updateUserDTO);
