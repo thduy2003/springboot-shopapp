@@ -7,6 +7,9 @@ import com.example.shopapp.models.ProductImage;
 import com.example.shopapp.responses.ProductListResponse;
 import com.example.shopapp.responses.ProductResponse;
 import com.example.shopapp.services.ProductService;
+import com.example.shopapp.services.IProductRedisService;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,18 +43,24 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+    private final IProductRedisService iProductRedisService;
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
     @GetMapping("")
     public ResponseEntity<ProductListResponse> getAllProducts(@RequestParam(defaultValue = "") String keyword,
                                                               @RequestParam(defaultValue = "0", name = "category_id") Long categoryId,
                                                               @RequestParam(defaultValue = "1") int page,
-                                                              @RequestParam(defaultValue = "10") int limit) {
+                                                              @RequestParam(defaultValue = "10") int limit) throws JsonProcessingException {
         PageRequest pageRequest = PageRequest.of(
                 page -1,limit, Sort.by("id").ascending());
+        int totalPages = 0;
         logger.info(String.format("keyword == %s, categoryid = %d, page = %d, limit = %d", keyword, categoryId, page, limit));
-        Page<ProductResponse> productPage = productService.getAllProducts(keyword, categoryId,pageRequest);
-        int totalPages = productPage.getTotalPages();
-        List<ProductResponse> products = productPage.getContent();
+        List<ProductResponse> products = iProductRedisService.getAllProducts(keyword, categoryId, pageRequest);
+        if (products == null) {
+            Page<ProductResponse> productPages = productService.getAllProducts(keyword, categoryId, pageRequest);
+            totalPages = productPages.getTotalPages();
+            products = productPages.getContent();
+            iProductRedisService.saveAllProducts(products, keyword, categoryId, pageRequest);
+        }
         return ResponseEntity.ok(ProductListResponse.builder()
                 .products(products)
                 .totalPages(totalPages)
