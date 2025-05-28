@@ -22,6 +22,10 @@ spring:
   redis:
     host: localhost
     port: 6379
+  flyway:
+    locations: classpath:/db/migration,classpath:/dev/db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
 
   messages:
     basename: i18n/messages
