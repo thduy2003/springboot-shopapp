@@ -25,5 +25,11 @@ public class MessageKeys {
     public static final String FILE_LARGE = "File is too large! Maximum size is 10MB";
 
     public static final String FILE_MUST_BE_IMAGE = "File must be an image";
+
+    public static final String USER_NOT_FOUND = "user.not_found";
+
+    public static final String RESET_PASSWORD_FAILED = "user.reset_password.failed";
+
+    public static final String BLOCK_USER_FAILED = "user.block.failed";
 }
 

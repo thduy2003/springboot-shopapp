@@ -1,16 +1,22 @@
 package com.example.shopapp.services;
 
 import com.example.shopapp.components.JwtTokenUtils;
+import com.example.shopapp.components.LocalizationUtils;
 import com.example.shopapp.dtos.UpdateUserDTO;
 import com.example.shopapp.dtos.UserDTO;
 import com.example.shopapp.exception.DataNotFoundException;
 import com.example.shopapp.exception.PermissionDenyException;
 import com.example.shopapp.models.Role;
+import com.example.shopapp.models.Token;
 import com.example.shopapp.models.User;
 import com.example.shopapp.repositories.RoleRepository;
+import com.example.shopapp.repositories.TokenRepository;
 import com.example.shopapp.repositories.UserRepository;
+import com.example.shopapp.utils.MessageKeys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,6 +36,8 @@ public class UserService implements IUserService{
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtils jwtTokenUtils;
+    private final LocalizationUtils localizationUtils;
+    private final TokenRepository tokenRepository;
 
     @Override
     @Transactional
@@ -155,5 +164,34 @@ public class UserService implements IUserService{
 
         // Save the updated user
         return userRepository.save(existingUser);
+    }
+
+    @Override
+    public Page<User> findAllUsers(String keyword, Pageable pageable) {
+        return userRepository.findAll(keyword, pageable);
+    }
+
+    @Transactional
+    @Override
+    public void resetPassword(Long userId, String newPassword) throws Exception {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new DataNotFoundException(localizationUtils.getLocalizeMessage(MessageKeys.USER_NOT_FOUND))
+        );
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        List<Token> tokens = tokenRepository.findByUser(user);
+        tokenRepository.deleteAll(tokens);
+    }
+
+    @Transactional
+    @Override
+    public void blockOrEnable(Long userId, Boolean active) throws DataNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new DataNotFoundException(localizationUtils.getLocalizeMessage(MessageKeys.USER_NOT_FOUND))
+        );
+        user.setActive(active);
+        userRepository.save(user);
     }
 }
