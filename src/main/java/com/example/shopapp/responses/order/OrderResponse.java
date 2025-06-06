@@ -1,11 +1,9 @@
-package com.example.shopapp.responses;
+package com.example.shopapp.responses.order;
 
 import com.example.shopapp.models.Order;
 import com.example.shopapp.models.OrderDetail;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.Date;

@@ -4,7 +4,7 @@ import com.example.shopapp.components.LocalizationUtils;
 import com.example.shopapp.dtos.OrderDetailDTO;
 import com.example.shopapp.exception.DataNotFoundException;
 import com.example.shopapp.models.OrderDetail;
-import com.example.shopapp.responses.OrderDetailResponse;
+import com.example.shopapp.responses.order_detail.OrderDetailResponse;
 import com.example.shopapp.services.IOrderDetailService;
 import com.example.shopapp.utils.MessageKeys;
 import jakarta.validation.Valid;

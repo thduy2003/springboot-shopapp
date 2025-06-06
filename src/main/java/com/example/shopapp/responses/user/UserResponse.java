@@ -1,4 +1,4 @@
-package com.example.shopapp.responses;
+package com.example.shopapp.responses.user;
 
 import com.example.shopapp.models.Role;
 import com.example.shopapp.models.User;

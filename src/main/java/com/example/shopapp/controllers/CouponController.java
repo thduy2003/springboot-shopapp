@@ -1,6 +1,6 @@
 package com.example.shopapp.controllers;
 
-import com.example.shopapp.responses.CouponCalculationResponse;
+import com.example.shopapp.responses.coupon.CouponCalculationResponse;
 import com.example.shopapp.services.ICouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

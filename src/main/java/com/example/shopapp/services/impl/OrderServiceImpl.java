@@ -1,4 +1,4 @@
-package com.example.shopapp.services;
+package com.example.shopapp.services.impl;
 
 import com.example.shopapp.dtos.CartItemDTO;
 import com.example.shopapp.dtos.OrderDTO;
@@ -8,10 +8,9 @@ import com.example.shopapp.repositories.OrderDetailRepository;
 import com.example.shopapp.repositories.OrderRepository;
 import com.example.shopapp.repositories.ProductRepository;
 import com.example.shopapp.repositories.UserRepository;
-import com.example.shopapp.responses.OrderListResponse;
+import com.example.shopapp.services.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService implements IOrderService {
+public class OrderServiceImpl implements IOrderService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;

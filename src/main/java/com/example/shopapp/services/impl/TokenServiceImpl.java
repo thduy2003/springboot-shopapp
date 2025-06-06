@@ -1,24 +1,22 @@
-package com.example.shopapp.services;
+package com.example.shopapp.services.impl;
 
 import com.example.shopapp.models.Token;
 import com.example.shopapp.models.User;
 import com.example.shopapp.repositories.TokenRepository;
 import com.example.shopapp.repositories.UserRepository;
+import com.example.shopapp.services.ITokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class TokenService implements ITokenService {
+public class TokenServiceImpl implements ITokenService {
 
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;

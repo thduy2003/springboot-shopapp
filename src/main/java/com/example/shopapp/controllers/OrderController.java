@@ -1,11 +1,10 @@
 package com.example.shopapp.controllers;
 
 import com.example.shopapp.components.LocalizationUtils;
-import com.example.shopapp.dtos.CategoryDTO;
 import com.example.shopapp.dtos.OrderDTO;
 import com.example.shopapp.models.Order;
-import com.example.shopapp.responses.OrderListResponse;
-import com.example.shopapp.responses.OrderResponse;
+import com.example.shopapp.responses.order.OrderListResponse;
+import com.example.shopapp.responses.order.OrderResponse;
 import com.example.shopapp.services.IOrderService;
 import com.example.shopapp.utils.MessageKeys;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.example.shopapp.services;
+package com.example.shopapp.services.impl;
 
 import com.example.shopapp.dtos.OrderDetailDTO;
 import com.example.shopapp.exception.DataNotFoundException;
@@ -8,6 +8,7 @@ import com.example.shopapp.models.Product;
 import com.example.shopapp.repositories.OrderDetailRepository;
 import com.example.shopapp.repositories.OrderRepository;
 import com.example.shopapp.repositories.ProductRepository;
+import com.example.shopapp.services.IOrderDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OrderDetailService implements IOrderDetailService{
+public class OrderDetailServiceImpl implements IOrderDetailService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final OrderDetailRepository orderDetailRepository;

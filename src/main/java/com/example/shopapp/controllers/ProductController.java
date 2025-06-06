@@ -4,9 +4,9 @@ import com.example.shopapp.dtos.ProductDTO;
 import com.example.shopapp.dtos.ProductImageDTO;
 import com.example.shopapp.models.Product;
 import com.example.shopapp.models.ProductImage;
-import com.example.shopapp.responses.ProductListResponse;
-import com.example.shopapp.responses.ProductResponse;
-import com.example.shopapp.services.ProductService;
+import com.example.shopapp.responses.product.ProductListResponse;
+import com.example.shopapp.responses.product.ProductResponse;
+import com.example.shopapp.services.impl.ProductServiceImpl;
 import com.example.shopapp.services.IProductRedisService;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -36,13 +36,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/products")
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductService productService;
+    private final ProductServiceImpl productService;
     private final IProductRedisService iProductRedisService;
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
     @GetMapping("")

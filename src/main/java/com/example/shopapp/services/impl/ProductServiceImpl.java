@@ -1,4 +1,4 @@
-package com.example.shopapp.services;
+package com.example.shopapp.services.impl;
 
 import com.example.shopapp.dtos.ProductDTO;
 import com.example.shopapp.dtos.ProductImageDTO;
@@ -10,7 +10,8 @@ import com.example.shopapp.models.ProductImage;
 import com.example.shopapp.repositories.CategoryRepository;
 import com.example.shopapp.repositories.ProductImageRepository;
 import com.example.shopapp.repositories.ProductRepository;
-import com.example.shopapp.responses.ProductResponse;
+import com.example.shopapp.responses.product.ProductResponse;
+import com.example.shopapp.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService implements IProductService{
+public class ProductServiceImpl implements IProductService {
   private final ProductRepository productRepository;
   private final CategoryRepository categoryRepository;
     private final ProductImageRepository productImageRepository;

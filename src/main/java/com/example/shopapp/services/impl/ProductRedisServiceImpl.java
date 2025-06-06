@@ -1,6 +1,7 @@
-package com.example.shopapp.services;
+package com.example.shopapp.services.impl;
 
-import com.example.shopapp.responses.ProductResponse;
+import com.example.shopapp.responses.product.ProductResponse;
+import com.example.shopapp.services.IProductRedisService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +16,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class ProductRedisService  implements IProductRedisService{
+public class ProductRedisServiceImpl implements IProductRedisService {
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 

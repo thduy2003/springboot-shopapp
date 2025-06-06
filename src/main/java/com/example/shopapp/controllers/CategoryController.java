@@ -3,21 +3,18 @@ package com.example.shopapp.controllers;
 import com.example.shopapp.components.LocalizationUtils;
 import com.example.shopapp.dtos.CategoryDTO;
 import com.example.shopapp.models.Category;
-import com.example.shopapp.services.CategoryService;
 import com.example.shopapp.services.ICategoryService;
 import com.example.shopapp.utils.MessageKeys;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Stream;
+
 @RestController
 @RequestMapping("api/v1/categories")
 @RequiredArgsConstructor

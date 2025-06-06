@@ -1,8 +1,9 @@
-package com.example.shopapp.services;
+package com.example.shopapp.services.impl;
 
 import com.example.shopapp.dtos.CategoryDTO;
 import com.example.shopapp.models.Category;
 import com.example.shopapp.repositories.CategoryRepository;
+import com.example.shopapp.services.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.Optional;
 @Service
 //tự khởi tạo constructor nếu có thuộc tính bên trong class
 @RequiredArgsConstructor
-public class CategoryService implements ICategoryService{
+public class CategoryServiceImpl implements ICategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override

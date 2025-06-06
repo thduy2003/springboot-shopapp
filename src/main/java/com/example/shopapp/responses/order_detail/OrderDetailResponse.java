@@ -1,4 +1,4 @@
-package com.example.shopapp.responses;
+package com.example.shopapp.responses.order_detail;
 
 import com.example.shopapp.models.OrderDetail;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,9 +1,10 @@
-package com.example.shopapp.services;
+package com.example.shopapp.services.impl;
 
 import com.example.shopapp.models.Coupon;
 import com.example.shopapp.models.CouponCondition;
 import com.example.shopapp.repositories.CouponRepository;
 import com.example.shopapp.repositories.CouponConditionRepository;
+import com.example.shopapp.services.ICouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class CouponService implements ICouponService{
+public class CouponServiceImpl implements ICouponService {
     private final CouponRepository couponRepository;
     private final CouponConditionRepository couponConditionRepository;
 

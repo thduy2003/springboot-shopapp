@@ -1,17 +1,13 @@
-package com.example.shopapp.responses;
+package com.example.shopapp.responses.product;
 
 import com.example.shopapp.models.Product;
 import com.example.shopapp.models.ProductImage;
+import com.example.shopapp.responses.BaseResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @Setter

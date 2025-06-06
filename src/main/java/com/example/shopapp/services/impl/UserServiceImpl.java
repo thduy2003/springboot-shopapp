@@ -1,4 +1,4 @@
-package com.example.shopapp.services;
+package com.example.shopapp.services.impl;
 
 import com.example.shopapp.components.JwtTokenUtils;
 import com.example.shopapp.components.LocalizationUtils;
@@ -12,6 +12,7 @@ import com.example.shopapp.models.User;
 import com.example.shopapp.repositories.RoleRepository;
 import com.example.shopapp.repositories.TokenRepository;
 import com.example.shopapp.repositories.UserRepository;
+import com.example.shopapp.services.IUserService;
 import com.example.shopapp.utils.MessageKeys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,7 +31,7 @@ import java.util.Optional;
 @Service
 //tự khởi tạo constructor nếu có thuộc tính bên trong class
 @RequiredArgsConstructor
-public class UserService implements IUserService{
+public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;

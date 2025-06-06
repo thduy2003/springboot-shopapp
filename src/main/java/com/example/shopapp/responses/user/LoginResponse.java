@@ -1,6 +1,5 @@
-package com.example.shopapp.responses;
+package com.example.shopapp.responses.user;
 
-import com.example.shopapp.models.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -10,10 +9,10 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterResponse {
+public class LoginResponse {
     @JsonProperty("message")
     private String message;
 
-    @JsonProperty("user")
-    private User user;
+    @JsonProperty("token")
+    private String token;
 }
