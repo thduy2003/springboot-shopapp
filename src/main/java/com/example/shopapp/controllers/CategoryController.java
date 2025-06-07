@@ -3,6 +3,7 @@ package com.example.shopapp.controllers;
 import com.example.shopapp.components.LocalizationUtils;
 import com.example.shopapp.dtos.CategoryDTO;
 import com.example.shopapp.models.Category;
+import com.example.shopapp.responses.ResponseObject;
 import com.example.shopapp.services.ICategoryService;
 import com.example.shopapp.utils.MessageKeys;
 import jakarta.validation.Valid;
@@ -25,6 +26,18 @@ public class CategoryController {
     public ResponseEntity<List<Category>> getAllCategories(@RequestParam("page") int page, @RequestParam("limit") int limit) {
         List<Category> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCategoryById(
+            @PathVariable("id") Long categoryId
+    ) {
+        Category existingCategory = categoryService.getCategoryById(categoryId);
+        return ResponseEntity.ok(ResponseObject.builder()
+                        .data(existingCategory)
+                        .message("Get category information successfully")
+                        .status(HttpStatus.OK)
+                .build());
     }
     @PostMapping("")
     public ResponseEntity<?> insertCategory(@Valid @RequestBody CategoryDTO categoryDTO, BindingResult result) {
