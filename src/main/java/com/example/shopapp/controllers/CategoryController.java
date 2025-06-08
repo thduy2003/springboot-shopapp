@@ -1,6 +1,7 @@
 package com.example.shopapp.controllers;
 
 import com.example.shopapp.components.LocalizationUtils;
+import com.example.shopapp.components.converters.CategoryMessageConverter;
 import com.example.shopapp.dtos.CategoryDTO;
 import com.example.shopapp.models.Category;
 import com.example.shopapp.responses.ResponseObject;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.List;
 
@@ -22,10 +24,17 @@ import java.util.List;
 public class CategoryController {
     private final ICategoryService categoryService;
     private final LocalizationUtils localizationUtils;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
     @GetMapping("")
-    public ResponseEntity<List<Category>> getAllCategories(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+    public ResponseEntity<ResponseObject> getAllCategories(@RequestParam("page") int page, @RequestParam("limit") int limit) {
         List<Category> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(categories);
+        /*kafka get all category*/
+        this.kafkaTemplate.send("get-all-categories", categories);
+        return ResponseEntity.ok(ResponseObject.builder()
+                .data(categories)
+                .message("Get all categories successfully")
+                .status(HttpStatus.OK)
+                .build());
     }
 
     @GetMapping("/{id}")
@@ -49,7 +58,10 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(localizationUtils.getLocalizeMessage(MessageKeys.FAILED_CREATE_CATEGORY
                     + errorMessages));
         }
-        categoryService.createCategory(categoryDTO);
+        Category newCategory = categoryService.createCategory(categoryDTO);
+        // send kafka categoryAdd commentMore actions
+        this.kafkaTemplate.send("insert-a-category", newCategory); // producer
+        this.kafkaTemplate.setMessageConverter(new CategoryMessageConverter());
         return ResponseEntity.ok(localizationUtils.getLocalizeMessage(MessageKeys.CREATE_CATEGORY_SUCCESSFULLY ));
     }
     @PutMapping("/{id}")

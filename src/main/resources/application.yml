@@ -26,7 +26,16 @@ spring:
     locations: classpath:/db/migration,classpath:/dev/db/migration
     baseline-on-migrate: true
     baseline-version: 0
-
+  # kafka
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        "[spring.json.type.mapping]": "category:com.example.shopapp.models.Category"
+    consumer:
+      group-id: groupA
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
   messages:
     basename: i18n/messages
     encoding: UTF-8
